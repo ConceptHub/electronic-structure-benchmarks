@@ -11,7 +11,7 @@ def main():
         if m:
             val = 0
             # try to match 'XmY.YYs'
-            m1 = re.search('(\d+)m(\d+)\.(\d+)s', m.group(2).strip())
+            m1 = re.search('(\d+)m\s*(\d+)\.(\d+)s', m.group(2).strip())
             if m1:
                 val = 60 * int(m1.group(1)) + int(m1.group(2))
 
