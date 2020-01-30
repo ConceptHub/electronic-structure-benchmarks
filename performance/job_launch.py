@@ -16,12 +16,14 @@ parser.add_argument('-s', '--scratch', help='Scratch directory', default='/tmp')
 parser.add_argument('-c', '--command', help='Execution command', default='pw.x')
 parser.add_argument('-k', '--kpool', type=int, nargs='+', help='Number of k-point pools', default=[1])
 parser.add_argument('-n', '--nodes', type=int, nargs='+', help='Number of nodes for band parallelisation', default=[1])
-parser.add_argument('-S', action='store_true', help='Submit the jobs')
+parser.add_argument('-R', '--run', action='store_true', help='Submit the jobs')
+parser.add_argument('-T', '--time', help='max. execution time', default='0:30:00')
+parser.add_argument('-S', '--suffix', help='additional suffix to the base directory name of the test', default='')
 args = parser.parse_args()
 
 def main():
 
-    target_dir = args.scratch + '/' + os.path.basename(args.DIR)
+    target_dir = args.scratch + '/' + os.path.basename(args.DIR) + args.suffix
     print("Terget directory: %s"%target_dir)
 
     if not os.path.exists(target_dir):
@@ -47,7 +49,7 @@ def main():
                 f.write('#!/bin/bash -l\n')
                 f.write('#SBATCH --job-name="test_scf"\n')
                 f.write('#SBATCH --nodes=%i\n'%N)
-                f.write('#SBATCH --time=00:40:00\n')
+                f.write('#SBATCH --time=%s\n'%args.time)
                 f.write('#SBATCH --output=slurm-stdout.txt\n')
                 f.write('#SBATCH --error=slurm-stderr.txt\n')
                 f.write('#SBATCH --account=csstaff\n')
@@ -57,7 +59,7 @@ def main():
                 f.write('srun -n %i --hint=nomultithread --unbuffered -c %i %s -i %s -npool %i -ndiag %i\n'%\
                     (num_ranks, args.threads, args.command, args.input, k, num_ranks_diag))
 
-            if (args.S):
+            if (args.run):
                 print("Sumbinning the job: %s"%label)
                 p = subprocess.Popen(["sbatch", "run.slrm"], cwd = target_subdir)
                 p.wait()
