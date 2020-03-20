@@ -14,6 +14,12 @@ def main():
             m1 = re.search('(\d+)m\s*(\d+)\.(\d+)s', m.group(2).strip())
             if m1:
                 val = 60 * int(m1.group(1)) + int(m1.group(2))
+            else:
+                # try to match XhYm
+                m1 = re.search('(\d+)h\s*(\d+)m', m.group(2).strip())
+                if m1:
+                    val = 3600 * int(m1.group(1)) + 60 * int(m1.group(2))
+
 
 
 
