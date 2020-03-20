@@ -15,7 +15,7 @@ parser.add_argument('-t', '--threads', type=int, help='Number of threads per ran
 parser.add_argument('-s', '--scratch', help='Scratch directory', default='/tmp')
 parser.add_argument('-c', '--command', help='Execution command', default='pw.x')
 parser.add_argument('-k', '--kpool', type=int, nargs='+', help='Number of k-point pools', default=[1])
-parser.add_argument('-d', '--diag', type=int, nargs='+', help='Number of ranks for diagonalization', default=[1])
+parser.add_argument('-n', '--nodes', type=int, nargs='+', help='Number of nodes for band parallelisation', default=[1])
 parser.add_argument('-R', '--run', action='store_true', help='Submit the jobs')
 parser.add_argument('-T', '--time', help='max. execution time', default='0:30:00')
 parser.add_argument('-S', '--suffix', help='additional suffix to the base directory name of the test', default='')
@@ -31,10 +31,10 @@ def main():
 
     for k in args.kpool:
 
-        for d in args.diag:
-            num_ranks_diag = d
-            num_ranks = d * k
-            num_nodes = max((num_ranks * args.threads) / num_threads_per_node[args.partition], 1)
+        for N in args.nodes:
+            num_ranks_diag = N * (num_threads_per_node[args.partition] / args.threads)
+            num_ranks = k * num_ranks_diag
+            num_nodes = N * k
             label = "%iN_%iR_%iT"%(num_nodes, num_ranks, args.threads)
 
             target_subdir = target_dir + '/' + label
@@ -48,7 +48,7 @@ def main():
             with open(target_subdir + '/run.slrm', 'w') as f:
                 f.write('#!/bin/bash -l\n')
                 f.write('#SBATCH --job-name="test_scf"\n')
-                f.write('#SBATCH --nodes=%i\n'%num_nodes)
+                f.write('#SBATCH --nodes=%i\n'%N)
                 f.write('#SBATCH --time=%s\n'%args.time)
                 f.write('#SBATCH --output=slurm-stdout.txt\n')
                 f.write('#SBATCH --error=slurm-stderr.txt\n')
