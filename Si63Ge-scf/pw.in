@@ -6,11 +6,14 @@ outdir='./out/',
 prefix = 'scf_'
 disk_io='none',
 wf_collect=.false.
+verbosity='high'
+tstress = true
+tprnfor = true
 /
 &system
-ibrav=0, celldm(1)=1, ecutwfc=40, ecutrho = 400,
+ibrav=0, celldm(1)=1, ecutwfc=50, ecutrho = 800,
 occupations = 'smearing', smearing = 'gauss', degauss = 0.01,
-nat=64 ntyp=2
+nat=64, ntyp=2, nbnd=800
 /
 &electrons
 conv_thr =  1.0d-11,
