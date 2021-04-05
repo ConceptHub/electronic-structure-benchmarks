@@ -11,7 +11,7 @@ disk_io = 'none',
 wf_collect = false
 /
 &system
-ibrav=0, celldm(1)=1, ecutwfc=25, ecutrho = 200, nspin=2, starting_magnetization(4)=1.0
+ibrav=0, celldm(1)=1, ecutwfc=25, ecutrho = 200, nspin=2, starting_magnetization(4)=0.2
 occupations = 'smearing', smearing = 'gauss', degauss = 0.001,
 nat=1080, ntyp=4
 /
@@ -27,10 +27,10 @@ ion_dynamics='bfgs',
 cell_dynamics='bfgs',
 /
 ATOMIC_SPECIES
-Sr 0.0   sr_pbe_v1.uspp.F.UPF
-O 0.0    o_pbe_v1.2.uspp.F.UPF
-Ti 0.0   ti_pbe_v1.4.uspp.F.UPF
-Cr 0.0   cr_pbe_v1.5.uspp.F.UPF 
+Sr 0.0   sr_lda_v1.uspp.F.UPF
+O 0.0    o_lda_v1.2.uspp.F.UPF
+Ti 0.0   ti_lda_v1.4.uspp.F.UPF
+Cr 0.0   cr_lda_v1.5.uspp.F.UPF
 CELL_PARAMETERS
        44.27945784        0.00000000        0.00000000
         0.00000000       44.27945784        0.00000000
