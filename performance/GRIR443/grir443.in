@@ -28,8 +28,8 @@
     electron_maxstep = 100
   /
 ATOMIC_SPECIES
- C    12.010   C.pbe-paw_kj-x.UPF
- Ir  192.22   Ir.pbe-paw_kj.UPF
+ C    12.010   c_lda_v1.2.uspp.F.UPF
+ Ir  192.22   ir_lda_v1.2.uspp.F.UPF
 K_POINTS {automatic}
 2 2 2 0 0 0
 ATOMIC_POSITIONS (crystal)
