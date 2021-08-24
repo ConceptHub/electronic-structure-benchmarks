@@ -48,7 +48,7 @@ def main():
             with open(target_subdir + '/run.slrm', 'w') as f:
                 f.write('#!/bin/bash -l\n')
                 f.write('#SBATCH --job-name="test_scf"\n')
-                f.write('#SBATCH --nodes=%i\n'%N)
+                f.write('#SBATCH --nodes=%i\n'%num_nodes)
                 f.write('#SBATCH --time=%s\n'%args.time)
                 f.write('#SBATCH --output=slurm-stdout.txt\n')
                 f.write('#SBATCH --error=slurm-stderr.txt\n')

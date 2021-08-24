@@ -10,6 +10,7 @@
   tprnfor = .true.
   tstress = .true.
   verbosity = 'high'
+  nstep = 100
 /
 &SYSTEM
   degauss =   1.0000000000d-02
