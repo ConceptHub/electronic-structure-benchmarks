@@ -1,11 +1,17 @@
 A collection of performance benchmarks for QE
 
-To submit jobs, use:
+1. To submit jobs, run:
 ```bash
-python job_launch.py Si511Ge -i pw.in -p gpu -t 12 -s $SCRATCH -c 'pw.x -sirius' -k 1 --nodes 9 16 25 36 -T '0:20:00' -S '_QE_sirius_elpa' -R
+python job_launch.py Au-surf -i pw.in -p mc -t 3 -c 'pw.x' -k 2 -n 12 24 36 48 -T '0:20:00' -l 'qe_cscs_67' -R
+python job_launch.py Au-surf -i pw.in -p gpu -t 12 -c 'pw.x -sirius_scf' -k 2 -n 1 2 3 4 -T '0:20:00' -l 'qe_sirius' -R
  ```
 
-To collect data, use:
+2. To collect data, run:
 ```bash
-find $SCRATCH/Si511Ge_QE_native_6T -name slurm-stdout.txt -exec sh -c "echo {}; python get_pwscf_time.py {}" \;
+python collect.py $SCRATCH/Au-surf
+```
+
+3. To produce a plot, run:
+```bash
+python plot.py -x nodes:Nodes -y scf_time:SCF Au-surf.json "qe_cscs_67:QE-6.7 CPU" "qe_sirius:QE+SIRIUS GPU"
 ```
