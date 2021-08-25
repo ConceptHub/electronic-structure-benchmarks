@@ -15,3 +15,15 @@ python collect.py $SCRATCH/Au-surf
 ```bash
 python plot.py -x nodes:Nodes -y scf_time:SCF Au-surf.json "qe_cscs_67:QE-6.7 CPU" "qe_sirius:QE+SIRIUS GPU"
 ```
+
+# Individual benchmarks
+
+## Si511Ge
+```bash
+python job_launch.py Si511Ge -i pw.in -p mc -t 9 -c 'pw.x' -k 1 -n 16 36 64 100 -T '0:30:00' -l 'qe_cscs_67' -R
+```
+
+## Au-surf
+```bash
+python job_launch.py Au-surf -i pw.in -p gpu -t 12 -c 'pw.x -sirius_scf' -k 2 -n 1 2 3 4 -T '0:20:00' -l 'qe_sirius' -R
+```
