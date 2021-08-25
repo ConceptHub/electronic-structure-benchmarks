@@ -7,24 +7,35 @@ parser = argparse.ArgumentParser(description='Create a plot.')
 parser.add_argument('filename', help='JSON dictionary with results.')
 parser.add_argument('lmap', metavar='labels', type=str, nargs='*',
         help='Human-readable plot labels provided as a list of old:new maps')
+parser.add_argument('-x', '--xaxis', type=str, help='What to take as x-axis, label:name map',
+        default='nodes:Number of nodes')
+parser.add_argument('-y', '--yaxis', type=str, help='What to take as y-axis, label:name map',
+        default='scf_time:Time to solution (sec)')
 args = parser.parse_args()
+
+def split_label(s):
+    i = s.find(':')
+    return s[:i], s[i+1:]
 
 lmap = {}
 for e in args.lmap:
-    i = e.find(':')
-    lmap[e[:i]] = e[i+1:]
+    label_id, label = split_label(e)
+    lmap[label_id] = label
+
 
 with open(args.filename) as json_file:
     inp = json.load(json_file)
 
+x_axis, x_axis_label = split_label(args.xaxis)
+y_axis, y_axis_label = split_label(args.yaxis)
+
 data_points = {}
-for p in inp["data"]:
+for p in lmap:
     xy_unsorted = []
     for d in inp["data"][p]:
-        nodes = d['nodes']
-        scf_time = d['scf_time']
-        energy = d['energy']
-        xy_unsorted.append((nodes, scf_time))
+        x = d[x_axis]
+        y = d[y_axis]
+        xy_unsorted.append((x, y))
 
     xy_sorted = sorted(xy_unsorted)
     res = list(zip(*xy_sorted))
@@ -33,14 +44,10 @@ for p in inp["data"]:
     data_points[p]['y'] = res[1]
 
 nodes = []
-ymax = 0
-for e in data_points:
-    ymax = max(ymax, data_points[e]['y'][0])
-    if not nodes:
-        nodes = data_points[e]['x']
-    else:
-        if nodes != data_points[e]['x']:
-            raise RuntimeError('Wrong number of nodes')
+for e in lmap:
+    nodes = list(set(nodes) | set(data_points[e]['x']))
+
+nodes = sorted(nodes)
 
 xlabels = [str(e) for e in nodes]
 
@@ -63,15 +70,15 @@ x = np.arange(len(xlabels))
 fig, ax = plt.subplots()
 
 
-ax.set_title(lmap.get('title', inp['title']))
+ax.set_title(inp['title'])
 
-ax.set_ylabel('Time to solution (sec.)')
+ax.set_ylabel(y_axis_label)
 ax.set_xticks(x)
-ax.set_xlabel("Nodes")
+ax.set_xlabel(x_axis_label)
 ax.set_xticklabels(xlabels)
 
-for e in data_points:
-    ax.plot(x, data_points[e]['y'], 'o-', label=lmap.get(e, e))
+for e in lmap:
+    ax.plot(x, data_points[e]['y'], 'o-', label=lmap[e])
 
 ax.set_ylim(ymin=0)
 ax.grid(True)
