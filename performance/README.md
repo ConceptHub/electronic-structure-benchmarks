@@ -20,10 +20,20 @@ python plot.py -x nodes:Nodes -y scf_time:SCF Au-surf.json "qe_cscs_67:QE-6.7 CP
 
 ## Si511Ge
 ```bash
+# run on 4, 9, 16 and 25 nodes with 9 threads/rank and 4 ranks/node
 python job_launch.py Si511Ge -i pw.in -p mc -t 9 -c 'pw.x' -k 1 -n 16 36 64 100 -T '0:30:00' -l 'qe_cscs_67' -R
 ```
 
 ## Au-surf
 ```bash
+# run on 1, 2, 3, 4, nodes with 12 threads/ranks and 1 rank/node
 python job_launch.py Au-surf -i pw.in -p gpu -t 12 -c 'pw.x -sirius_scf' -k 2 -n 1 2 3 4 -T '0:20:00' -l 'qe_sirius' -R
+```
+
+## B6Ni8
+```bash
+# run on 4, 8, 16, 32 nodes with 3 threads/rank and 12 ranks/node
+python job_launch.py B6Ni8 -i pw.in -p mc -t 3 -c 'pw.x' -k 48 96 192 384 -n 1 -T '0:30:00' -l 'qe_cscs_67' -R
+# run with QE-cuf
+python job_launch.py B6Ni8 -i pw.in -p gpu -t 6 -c 'pw.x' -k 8 16 32 64 -n 1 -T '0:30:00' -l 'qe_gpu_cscs_66a2' -R
 ```
