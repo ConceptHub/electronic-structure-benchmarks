@@ -37,3 +37,10 @@ python job_launch.py B6Ni8 -i pw.in -p mc -t 3 -c 'pw.x' -k 48 96 192 384 -n 1 -
 # run with QE-cuf
 python job_launch.py B6Ni8 -i pw.in -p gpu -t 6 -c 'pw.x' -k 8 16 32 64 -n 1 -T '0:30:00' -l 'qe_gpu_cscs_66a2' -R
 ```
+
+## ZrSi
+```bash
+python3 job_launch.py ZrSi -i pw.in -p gpu -t 12 -c 'pw.x -sirius_scf' -k 14 28 56 112 -n 1 -T '0:40:00' -l 'qe_sirius' -R
+python3 job_launch.py ZrSi -i pw.in -p gpu -t 12 -c 'pw.x' -k 14 28 56 112 -n 1 -T '0:40:00' -l 'qe_66a2_cscs' -RA
+python3 collect.py $SCRATCH/ZrSi
+```

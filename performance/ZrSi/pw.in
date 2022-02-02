@@ -6,8 +6,8 @@
   outdir = './'
   verbosity = 'high'
   disk_io = 'none',
-  tstress = true,
-  tprnfor = true
+  tstress = false,
+  tprnfor = false
 /
 &SYSTEM
   degauss =   2.0000000000d-02
